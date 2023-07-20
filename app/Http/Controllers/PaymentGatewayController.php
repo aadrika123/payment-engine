@@ -170,8 +170,8 @@ class PaymentGatewayController extends Controller
                 'propType'      => $request->propType
             ];
             $saveRequestObj->saveRazorpayRequest($userId, $ulbId, $returnData['orderId'], $request);
-            $returnData = json_decode(collect($returnData));
-            return responseMsgs(true, "OrderId Generated!", $returnData, "", "04", responseTime(), "POST", $request->deviceId);
+            $moduleReturnData = responseMsgs(true, "OrderId Generated!", $returnData, "", "04", responseTime(), "POST", $request->deviceId);
+            return json_decode($moduleReturnData);
         } catch (Exception $e) {
             return responseMsgs(false, $e->getMessage(), [], "", "04", responseTime(), "POST", $request->deviceId);
         }
