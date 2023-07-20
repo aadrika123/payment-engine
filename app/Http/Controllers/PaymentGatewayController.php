@@ -158,7 +158,7 @@ class PaymentGatewayController extends Controller
                 'payment_capture'   => 1                                                            // Static
             ));
 
-            $Returndata = [
+            $returnData = [
                 'orderId'       => $mOrder['id'],
                 'amount'        => $request->all()['amount'],
                 'currency'      => 'INR',                                                           // Static
@@ -169,8 +169,9 @@ class PaymentGatewayController extends Controller
                 'departmentId'  => $request->departmentId,
                 'propType'      => $request->propType
             ];
-            $saveRequestObj->saveRazorpayRequest($userId, $ulbId, $Returndata['orderId'], $request);
-            return responseMsgs(true, "OrderId Generated!", $Returndata, "", "04", responseTime(), "POST", $request->deviceId);
+            $saveRequestObj->saveRazorpayRequest($userId, $ulbId, $returnData['orderId'], $request);
+            $returnData = json_decode(collect($returnData));
+            return responseMsgs(true, "OrderId Generated!", $returnData, "", "04", responseTime(), "POST", $request->deviceId);
         } catch (Exception $e) {
             return responseMsgs(false, $e->getMessage(), [], "", "04", responseTime(), "POST", $request->deviceId);
         }
