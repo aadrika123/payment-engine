@@ -124,7 +124,8 @@ class PaymentGatewayController extends Controller
             'amount'        => 'required|',
             'workflowId'    => 'required|',
             'ulbId'         => 'nullable',
-            'auth'          => 'required',
+            'auth'          => 'required|array',
+            'departmentId'  => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -136,7 +137,7 @@ class PaymentGatewayController extends Controller
             $mWfWorkflow    = new WfWorkflow();
             $saveRequestObj = new PaymentRequest();
             $wfReq = new Request([
-                'id' => $request->workflowId
+                'id' => $request->workflowId ?? 0
             ]);
 
             $user               = (object)$request->auth;
@@ -295,6 +296,12 @@ class PaymentGatewayController extends Controller
                         break;
                     case ('9'):                                                             //(Pet Registration)
                         $pet = 461;                                                         // Static
+                        $petApi = $mApiMaster->getApiEndpoint($pet);
+                        Http::withHeaders([])
+                            ->post("$petApi->end_point", $transfer);
+                        break;
+                    case ('11'):                                                             //(Pet Registration)
+                        $pet = 77;                                                         // Static
                         $petApi = $mApiMaster->getApiEndpoint($pet);
                         Http::withHeaders([])
                             ->post("$petApi->end_point", $transfer);
