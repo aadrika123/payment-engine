@@ -21,4 +21,6 @@ $router->group(['prefix' => 'api/payment'], function () use ($router) {
     $router->post('/verify-payment-status', 'PaymentGatewayController@verifyPaymentStatus');
     $router->post('/generate-orderid', 'PaymentGatewayController@saveGenerateOrderid');
     $router->post('/razorpay-webhook', 'PaymentGatewayController@gettingWebhookDetails');
+    $router->post('/get-tran-by-orderid', 'PaymentGatewayController@getTranByOrderId');
+    
 });

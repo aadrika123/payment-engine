@@ -72,4 +72,25 @@ class WebhookPaymentData extends Model
 
         return $webhookData;
     }
+
+
+    /**
+     * | Fetch the Transaction No by Order id and Payment id
+     */
+    public function getTranByOrderPayId($req)
+    {
+        return WebhookPaymentData::where('payment_id', $req->paymentId)
+            ->select(
+                'payment_amount',
+                'payment_currency',
+                'payment_method',
+                'payment_bank',
+                'payment_email',
+                'payment_contact',
+                'payment_transaction_id as transaction_no'
+            )
+            ->where('payment_order_id', $req->orderId)
+            ->orderByDesc('id')
+            ->first();
+    }
 }

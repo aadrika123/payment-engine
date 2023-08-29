@@ -58,7 +58,6 @@ class PaymentGatewayController extends Controller
 
         try {
             return responseMsgs(true, "Payment is pending pleas check it later!", [], "", "01", responseTime(), "POST", $request->deviceId);
-
             # This is a different code 
             # Test code 
             $attributes     = null;
@@ -327,5 +326,28 @@ class PaymentGatewayController extends Controller
         $transactionNo  = $idGeneration->generate();
         $transactionNo  = str_replace('/', '-', $transactionNo);
         return $transactionNo;
+    }
+
+    /**
+     * | Get Transaction dtls by orderid and paymentid
+     */
+    public function getTranByOrderId(Request $req)
+    {
+        $rules = [
+            'orderId' => 'required',
+            'paymentId' => 'required'
+        ];
+
+        $validator = Validator::make($req->all(), $rules);
+        if ($validator->fails()) {
+            return responseMsgs(false, $validator->errors()->all(), "", "15", "1.0", "", "POST", $req->deviceId ?? "");
+        }
+        try {
+            $mWebhookPaymentData = new WebhookPaymentData();
+            $webhookData = $mWebhookPaymentData->getTranByOrderPayId($req);
+            return responseMsgs(true, "Transaction No", remove_null($webhookData), "15", "1.0", "", "POST", $req->deviceId ?? "");
+        } catch (Exception $e) {
+            return responseMsgs(false, $e->getMessage(), [], "", "01", responseTime(), $req->getMethod(), $req->deviceId);
+        }
     }
 }
